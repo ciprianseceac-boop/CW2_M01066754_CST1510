@@ -3,3 +3,4 @@ _pycache_/
 .env
 .vscode/
 .idea/
+users.txt
