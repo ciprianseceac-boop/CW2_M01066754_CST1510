@@ -4,3 +4,5 @@ _pycache_/
 .vscode/
 .idea/
 users.txt
+.db
+.csv
