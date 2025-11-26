@@ -11,7 +11,7 @@ def migrate_cyber_incidents(conn):
 
 
 
-def migrate_user_data():
+def migrate_user_data(conn):
     with open('DATA\\users.txt', 'r') as f:
         users = f.readlines()
     for user in users:
