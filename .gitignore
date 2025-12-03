@@ -4,5 +4,9 @@ _pycache_/
 .vscode/
 .idea/
 users.txt
-.db
 .csv
+.db
+DATA
+# ignore vscode AI rules
+.github\instructions\codacy.instructions.md
+.editorconfig
