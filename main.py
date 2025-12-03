@@ -21,11 +21,19 @@ def create_user_table(conn):
 def register_username(conn):
     name = input("Enter new username: ").strip()
     password = input("Enter new password: ").strip()
-    hashed = hash_password(password)
+
     cur = conn.cursor()
+    cur.execute("SELECT 1 FROM users WHERE username = ?", (name,))
+    if cur.fetchone():
+        print(f"Username '{name}' already exists. Please choose another.")
+        return False
+
+    hashed = hash_password(password)
     cur.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (name, hashed))
     conn.commit()
     print(f"User '{name}' registered successfully.")
+    return True
+
 
 def login_user(conn) -> bool:
     name = input("Enter username: ").strip()
@@ -75,6 +83,7 @@ def main():
                 print("Login failed. Invalid username or password.")
         elif choice == "3":
             print("Goodbye!")
+            conn.close()
             break
         else:
             print("Invalid choice. Please enter 1, 2, or 3.")

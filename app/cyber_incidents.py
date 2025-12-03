@@ -1,13 +1,13 @@
 import pandas as pd
 
-#-------migrate tabes-------
+# ------- migrate tables -------
 
 def migrate_cyber_incidents(conn):
-    path = ('DATA\\cyber_incidents.csv') 
+    path = 'DATA\\cyber_incidents.csv'
     df = pd.read_csv(path)
-    print(df.head())
-    df.to_sql( 'cyber_incidents', conn, if_exists='append', index=False )   
-print("Data imported successfully.")
+    print(df.head())  # preview first rows
+    df.to_sql('cyber_incidents', conn, if_exists='append', index=False)
+    print("Cyber incidents imported successfully.")
 
 def get_all_cyber_incidents(conn):
     sql = "SELECT * FROM cyber_incidents"
