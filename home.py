@@ -23,6 +23,7 @@ with tab_login:
             st.session_state['logged_in'] = True
             st.success("You are now logged in.")
             st.session_state['username'] = login_username
+            st.switch_page("pages/Dashboard.py")
         else:
             st.error("Login failed. Please try again.")
     # st.session_state

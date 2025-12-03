@@ -8,6 +8,11 @@ st.title("Cyber Incidents Dashboard")
 # Session state check
 if 'logged_in' not in st.session_state or not st.session_state['logged_in']:
     st.warning("Please log in to access the dashboard.")
+    if st.button("Go to Login Page"):
+        st.session_state['logged_in'] = False
+        st.info('Redirecting to login page...')
+        st.switch_page("Home.py")
+        st.experimental_set_query_params(page="home")
     st.stop()
 else:
     st.success(f"Welcome {st.session_state['username']}!")
