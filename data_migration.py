@@ -1,5 +1,8 @@
 import sqlite3
 import pandas as pd
+from app.db import get_connection
+
+conn = get_connection()
 
 def migrate_datasets_metadata(conn):
     path = 'DATA\\datasets_metadata.csv'

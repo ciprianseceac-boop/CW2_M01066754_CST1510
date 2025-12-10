@@ -1,8 +1,9 @@
 import bcrypt
+from app.db import get_connection
 
 def hash_password(password: str) -> str:
     """Hash a password for storage."""        
-    salt = bcrypt.gensalt()
+    salt = bcrypt.gensalt() 
     hashed = bcrypt.hashpw(password.encode("utf-8"), salt)    
     return hashed.decode('utf-8')
 
@@ -10,7 +11,7 @@ def verify_password(provided_password: str, stored_password: str) -> bool:
     """Verify a stored password against one provided by user"""
     return bcrypt.checkpw(provided_password.encode('utf-8'), stored_password.encode('utf-8'))
 
-def set_user(conn, name, hash):
+def add_user(conn, name, hash):
     cur = conn.cursor()
     sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
     cur.execute(sql, (name, hash))
@@ -20,7 +21,8 @@ def get_one_user(conn, name):
     cur = conn.cursor()
     sql = "SELECT id, username, password_hash FROM users WHERE username = ?"
     cur.execute(sql, (name,))
-    return cur.fetchone()
+    user = cur.fetchone()
+    return user
 
 def login_user(conn, name, password):
     user = get_one_user(conn, name)
@@ -55,12 +57,12 @@ def migrate_users(conn):
     with open('DATA\\users.txt', 'r') as f:
         for line in f:
             name, hash = line.strip().split(',')
-            set_user(conn, name, hash)
+            add_user(conn, name, hash)
 
 def register_username(conn, name, password):
     try:
         hashed = hash_password(password)
-        set_user(conn, name, hashed)
+        add_user(conn, name, hashed)
         return True, f"User '{name}' registered successfully."
     except Exception as e:
         return False, f"Registration failed: {str(e)}"
