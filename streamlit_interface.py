@@ -9,7 +9,7 @@ from app.cyber_incidents import migrate_cyber_incidents, get_all_cyber_incidents
 from app.schema import create_user_table
 from data_migration import migrate_it_tickets, migrate_datasets_metadata
 
-# --- Database setup ---
+#  Database setup 
 DATA_DIR = Path("DATA")
 DATA_PATH = DATA_DIR / "intelligence_platform.db"
 
@@ -17,7 +17,7 @@ DATA_PATH = DATA_DIR / "intelligence_platform.db"
 conn = sqlite3.connect(DATA_PATH)
 
 
-# ---------------- STREAMLIT INTERFACE ----------------
+#  STREAMLIT INTERFACE 
 st.title("Multi-Domain Intelligence Platform")
 st.header("User Authentication")
 
