@@ -4,21 +4,22 @@ import bcrypt
 import pandas as pd
 import numpy as np
 from pathlib import Path
+from app.users import register_username, login_user
+from app.cyber_incidents import migrate_cyber_incidents, get_all_cyber_incidents
+from app.schema import create_user_table
+from data_migration import migrate_it_tickets, migrate_datasets_metadata
 
 # --- Database setup ---
 DATA_DIR = Path("DATA")
 DATA_PATH = DATA_DIR / "intelligence_platform.db"
 
-# Now you can safely connect
+# Connect to database
 conn = sqlite3.connect(DATA_PATH)
 
 
 # ---------------- STREAMLIT INTERFACE ----------------
 st.title("Multi-Domain Intelligence Platform")
 st.header("User Authentication")
-
-# Connect to database
-conn = sqlite3.connect(DATA_PATH)
 
 # Run migrations automatically at startup
 migrate_cyber_incidents(conn)
@@ -61,13 +62,17 @@ elif menu == "Login" and not st.session_state["user"]:
 
 # Dashboards
 elif menu == "Cybersecurity" and st.session_state["user"]:
-    show_cybersecurity_dashboard(conn)
+    st.subheader("Cybersecurity Dashboard")
+    data = get_all_cyber_incidents(conn)
+    st.dataframe(data)
 
 elif menu == "IT Operations" and st.session_state["user"]:
-    show_it_dashboard(conn)
+    st.subheader("IT Operations Dashboard")
+    st.info("IT Operations dashboard coming soon.")
 
 elif menu == "Data Science" and st.session_state["user"]:
-    show_data_dashboard(conn)
+    st.subheader("Data Science Dashboard")
+    st.info("Data Science dashboard coming soon.")
 
 # Logout
 elif menu == "Logout" and st.session_state["user"]:

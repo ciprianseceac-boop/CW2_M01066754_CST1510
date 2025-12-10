@@ -22,23 +22,14 @@ def get_one_user(conn, name):
     cur.execute(sql, (name,))
     return cur.fetchone()
 
-def login_user(conn):
-    name = input("Enter name to login: ")
-    password = input("Enter password to login: ")  
+def login_user(conn, name, password):
     user = get_one_user(conn, name)
     if not user:
-        print("User not found.")
-        return False
+        return False, "User not found."
     _, name_db, hash_db = user
     if verify_password(password, hash_db):
-        print("Login successful.")
-        return True
-    
-    print("Login failed.")
-    return False
-
-    print("Login failed.")
-    return False
+        return True, "Login successful."
+    return False, "Login failed."
 
 def get_all_users(conn):
     cur = conn.cursor()
@@ -66,9 +57,10 @@ def migrate_users(conn):
             name, hash = line.strip().split(',')
             set_user(conn, name, hash)
 
-def register_username(conn):
-    name = input("Enter new username: ").strip()
-    password = input("Enter new password: ").strip()
-    hashed = hash_password(password)
-    set_user(conn, name, hashed)
-    print(f"User '{name}' registered successfully.")
+def register_username(conn, name, password):
+    try:
+        hashed = hash_password(password)
+        set_user(conn, name, hashed)
+        return True, f"User '{name}' registered successfully."
+    except Exception as e:
+        return False, f"Registration failed: {str(e)}"
